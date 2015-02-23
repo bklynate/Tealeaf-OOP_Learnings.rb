@@ -2,6 +2,9 @@ require 'pry'
 
 class MyCar
 
+  attr_accessor :color # solution to question 2 
+  attr_reader :year # solution to question 2 
+
   def initialize(y,c,m)
     @year = y
     @color = c
@@ -25,9 +28,19 @@ class MyCar
   end
 
   def current_speed
-    puts "Currently cruising along at #{@current_speed} mph."
+    puts "> Currently cruising along at #{@current_speed} mph."
   end
     
+  def spray_paint(color) # Solution to question 3
+    self.color = color
+    puts "> Color of car has been changed to #{color}"
+  end
 end
 
-binding.pry
+audiRS4 = MyCar.new(2015,'Black','Audi RS4')
+
+audiRS4.speed_up(35)
+audiRS4.current_speed
+audiRS4.speed_up(42)
+audiRS4.current_speed
+
