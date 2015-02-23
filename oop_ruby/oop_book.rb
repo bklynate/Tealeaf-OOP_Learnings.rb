@@ -15,5 +15,5 @@ jules = GoodDog.new("Jules")
 
 puts fido.speak
 puts jules.speak
-puts fido.  name
+puts fido.name
 puts jules.name
