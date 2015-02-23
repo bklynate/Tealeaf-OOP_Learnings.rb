@@ -17,3 +17,5 @@ puts fido.speak
 puts jules.speak
 puts fido.name
 puts jules.name
+jules.name = "Julien" #Ability to write the method over 
+puts jules.name
