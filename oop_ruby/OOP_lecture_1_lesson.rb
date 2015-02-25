@@ -3,13 +3,17 @@
 #2. classes contain behaviors
 
 class Dog
+  def initialize
+    
+  end
+
   def speak
     puts "Bark!!"
   end
 end
 
 bruno = Dog.new
-teddy.speak
+bruno.speak
 
 fido = Dog.new
 fido.speak
