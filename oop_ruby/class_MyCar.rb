@@ -1,9 +1,8 @@
 require 'pry'
 
 class MyCar
-
-  attr_accessor :color # solution to question 2 
-  attr_reader :year # solution to question 2 
+  attr_accessor :color ,:model # solution to question 2 
+  attr_reader  :year # solution to question 2 
 
   def initialize(y,c,m)
     @year = y
@@ -35,10 +34,18 @@ class MyCar
     self.color = color
     puts "> Color of car has been changed to #{color}"
   end
+
+  def self.gas_mileage(gallons,miles)
+    puts "> #{m/g}miles per gallon of gas"
+  end
+
+  def to_s
+    puts "Car Model: #{@model} | Year: #{year} | Color: #{color}"
+  end
 end
 
 audiRS4 = MyCar.new(2015,'Black','Audi RS4')
-
+binding.pry
 audiRS4.speed_up(35)
 audiRS4.current_speed
 audiRS4.speed_up(42)
