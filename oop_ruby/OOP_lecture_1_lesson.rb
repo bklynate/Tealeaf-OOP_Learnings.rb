@@ -1,36 +1,43 @@
 #OOP in Ruby
 #1. classes and objects
 #2. classes contain behaviors
-
+require 'pry'
 class Dog
+  @@total_number_of_dog_class = 0
+
+  attr_accessor :name,:height,:weight
+
+  def self.total_number_of_dogs 
+    "Total number of Dog Class : #{@@total_number_of_dog_class}"
+  end
+
   def initialize(n,h,w)
     @weight = w
     @height = h
     @name = n
+    @@total_number_of_dog_class += 1
   end
 
   def speak
-    @name + "Bark!!"
+    name.capitalize + " Barks!!"
   end
 
-  def get_name
-    @name 
-  end
-
-  def set_name=(new_name)
-    @name = new_name    
-  end
-  
   def info
-    "#{@name} is #{@height} feet tall and weighs #{@weight} pounds."
+    "#{name} is #{height} feet tall and weighs #{weight} pounds."
   end
-end
 
-bruno = Dog.new('bruno')
+  def change_info(n,h,w)
+    self.weight = w
+    self.height = h
+    self.name = n    
+  end
+
+end
+bruno = Dog.new('bruno',5,130)
 puts bruno.speak
 
-fido = Dog.new('fido')
+fido = Dog.new('fido',3,100)
 puts fido.speak
-
-puts fido.get_name
-puts bruno.get_name
+binding.pry
+# puts fido.get_name
+# puts bruno.get_name
