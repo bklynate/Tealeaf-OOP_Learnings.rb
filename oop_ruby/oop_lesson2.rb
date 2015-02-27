@@ -32,10 +32,38 @@ class Animal
   end
 end
 
-class Dog < Animal
+module Swimmable
+  def swim
+   "I'm swimming!" 
+  end
 end
 
-class Cat < Animal
+class Mammal < Animal
+  def warm_blooded?
+    true
+  end
+end
+
+class Dog < Mammal
+  include Swimmable
+
+  def speak
+    "#{name} is Barking!"
+  end
+
+  def eat
+    "#{name} is munching"
+  end
+
+  def fetch
+    "#{name} is fetching"
+  end
+end
+
+class Cat < Mammal
+  def speak
+    "#{name} is meowing"
+  end
 end
 
 bruno = Dog.new('bruno',5,130)
