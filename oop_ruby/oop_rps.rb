@@ -10,6 +10,7 @@ end
 class PlayableCharacter
   
   attr_accessor :name 
+  attr_reader :hand
   
   def initialize(n="computer")
     @name = n.capitalize
@@ -30,27 +31,23 @@ end
 
 
 class Human < PlayableCharacter
-  
-  attr_reader :hand
-  
+    
   def hand_pick
     say "Pick either 'r' : Rock | 'p' : Paper | 's' : Scissors"
     begin
       @hand = gets.chomp
-      say "Input Invalid: Pick either 'r' : Rock | 'p' : Paper | 's' : Scissors" unless Game::Choices.keys.include?(hand)       
-    end until Game::Choices.keys.include?(hand)
+      say "Input Invalid: Pick either 'r' : Rock | 'p' : Paper | 's' : Scissors" unless Game::CHOICES.keys.include?(hand)       
+    end until Game::CHOICES.keys.include?(hand)
     hand
   end
 
 end
 
 
-class ComputerPlayer < PlayableCharacter
-  
-  attr_reader :hand
+class Computer < PlayableCharacter
 
   def hand_pick
-    @hand = Game::Choices.keys.sample
+    @hand = Game::CHOICES.keys.sample
     hand
   end
 
@@ -61,10 +58,10 @@ class Game
 
   attr_reader :player, :computer
 
-  Choices =  {"r" => "Rock", "p" => "Paper", "s" => "Scissors"}
+  CHOICES =  {"r" => "Rock", "p" => "Paper", "s" => "Scissors"}
 
   def initialize
-    @computer = ComputerPlayer.new
+    @computer = Computer.new
   end
 
   def welcome_player
