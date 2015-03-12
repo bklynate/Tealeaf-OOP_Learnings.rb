@@ -6,6 +6,9 @@ def say(words)
   puts "> #{words}"
 end
 
+class Hand
+
+end
 
 class PlayableCharacter
   
@@ -17,14 +20,14 @@ class PlayableCharacter
   end
 
   def display_winning_message
-   case hand
-   when 'p'
-    say "Paper wraps Rock!"
-   when 'r'
-    say "Rock smashes Scissors!"
-   when 's'
-    say "Scissors shreds Paper!"
-   end
+    case hand
+    when 'p'
+      say "Paper wraps Rock!"
+    when 'r'
+      say "Rock smashes Scissors!"
+    when 's'
+      say "Scissors shreds Paper!"
+    end
   end
 
 end
@@ -66,8 +69,7 @@ class Game
 
   def welcome_player
     say "What is your name?"
-    p_name = gets.chomp
-    @player = Human.new(p_name)
+    @player = Human.new(gets.chomp)
     say "Welcome #{player.name}, This is the 'R'ock - 'P'aper - 'S'cissors Challenge"
     player
   end
@@ -82,11 +84,11 @@ class Game
 
   def try_again
     begin
-      a = ['y','n']
+      correct_responses = ['y','n']
       say "Try Again?[y/n] "
       answer = gets.chomp.downcase
-      say "Invalid Input !!" unless a.include?(answer)
-    end until a.include?(answer)
+      say "Invalid Input !!" unless correct_responses.include?(answer)
+    end until correct_responses.include?(answer)
     answer
     if answer == 'y'
       game = Game.new.start_game
@@ -124,4 +126,3 @@ class Game
 end
 
 game = Game.new.start_game
-game
