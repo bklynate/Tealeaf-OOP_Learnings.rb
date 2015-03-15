@@ -1,26 +1,28 @@
-# The game should begin with a player welcome. It should ask the player their name and use the player's
-# name throughout the game. Computer and Player both have access to same options of rock paper or scissors 
-# well as being able to do the same things.
-
 def say(words)
   puts "> #{words}"
 end
 
 class Hand
-
-end
-
-class PlayableCharacter
+  include Comparable
   
-  attr_accessor :name 
-  attr_reader :hand
+  attr_reader :type
   
-  def initialize(n="computer")
-    @name = n.capitalize
+  def initialize(t)
+    @type = t
+  end
+  
+  def <=>(other_weapon)
+    if @type == other_weapon.type
+      0
+    elsif (@type == "r" && other_weapon.type == "s") || (@type == "p" && other_weapon.type == "r") || (@type == "s" && other_weapon.type == "p")
+      1
+    else
+      -1
+    end
   end
 
   def display_winning_message
-    case hand
+    case @type
     when 'p'
       say "Paper wraps Rock!"
     when 'r'
@@ -29,100 +31,72 @@ class PlayableCharacter
       say "Scissors shreds Paper!"
     end
   end
-
 end
 
+class Player
+  attr_accessor :name, :hand
+  
+  def initialize(n)
+    @name = n.capitalize
+  end
 
-class Human < PlayableCharacter
-    
+  def set_name
+    say "Hey, what is your name?"
+    @name = gets.chomp.capitalize
+    say ''
+  end
+end
+
+class Human < Player
   def hand_pick
     say "Pick either 'r' : Rock | 'p' : Paper | 's' : Scissors"
     begin
-      @hand = gets.chomp
-      say "Input Invalid: Pick either 'r' : Rock | 'p' : Paper | 's' : Scissors" unless Game::CHOICES.keys.include?(hand)       
-    end until Game::CHOICES.keys.include?(hand)
-    hand
+      h = gets.chomp.downcase
+      say "Input Invalid: Pick either 'r' : Rock | 'p' : Paper | 's' : Scissors" unless Game::CHOICES.keys.include?(h)       
+    end until Game::CHOICES.keys.include?(h)
+    self.hand = Hand.new(h)
   end
-
 end
 
-
-class Computer < PlayableCharacter
-
-  def hand_pick
-    @hand = Game::CHOICES.keys.sample
-    hand
+class Computer < Player
+  def initialize(n="computer")
+    self.name = n.capitalize
   end
 
+  def hand_pick
+    self.hand = Hand.new(Game::CHOICES.keys.sample)
+  end
 end
 
 class Game
-  include Comparable
-
-  attr_reader :player, :computer
+  attr_accessor :player, :computer
 
   CHOICES =  {"r" => "Rock", "p" => "Paper", "s" => "Scissors"}
 
   def initialize
+    @player = Human.new('')
     @computer = Computer.new
   end
 
-  def welcome_player
-    say "What is your name?"
-    @player = Human.new(gets.chomp)
-    say "Welcome #{player.name}, This is the 'R'ock - 'P'aper - 'S'cissors Challenge"
-    player
-  end
-
   def start_game
-    welcome_player
+    player.set_name
+    say "Hello #{player.name}, welcome to the rps challange."
     player.hand_pick
     computer.hand_pick
     compare_hands
-    try_again
-  end
-
-  def try_again
-    begin
-      correct_responses = ['y','n']
-      say "Try Again?[y/n] "
-      answer = gets.chomp.downcase
-      say "Invalid Input !!" unless correct_responses.include?(answer)
-    end until correct_responses.include?(answer)
-    answer
-    if answer == 'y'
-      game = Game.new.start_game
-      game
-    else
-      answer == 'n'
-      exit
-    end
-  end
-
-  def <=>(other_hand)
-    if @value == other_hand.value
-      0
-    elsif (@value == 'p' && other_hand.value == 'r') ||
-          (@value == 'r' && other_hand.value == 's') ||
-          (@value == 's' && other_hand.value == 'p')
-      1
-    else
-      -1
-    end
   end
 
   def compare_hands
     if player.hand == computer.hand
       say "It's a tie!"
     elsif player.hand > computer.hand
-      player.display_winning_message
+      player.hand.display_winning_message
       say "#{player.name} won!"
     else
-      computer.display_winning_message
+      computer.hand.display_winning_message
       say "#{computer.name} won!"
     end
   end
-  
 end
 
 game = Game.new.start_game
