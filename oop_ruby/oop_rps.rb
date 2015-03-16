@@ -70,7 +70,9 @@ end
 
 class Game
   attr_accessor :player, :computer
+  attr_reader :try_again_response
 
+  
   CHOICES =  {"r" => "Rock", "p" => "Paper", "s" => "Scissors"}
 
   def initialize
@@ -80,10 +82,22 @@ class Game
 
   def start_game
     player.set_name
-    say "Hello #{player.name}, welcome to the rps challange."
-    player.hand_pick
-    computer.hand_pick
-    compare_hands
+    begin
+      say "Hello #{player.name}, welcome to the rps challange."
+      player.hand_pick
+      computer.hand_pick
+      compare_hands
+      try_again
+    end until try_again_response == 'n'
+  end
+
+  def try_again
+    correct_responses = ['y','n']
+    begin
+      say "Try again? [y/n]"
+      @try_again_response = gets.chomp.downcase
+      say "Invalid Input !!" unless correct_responses.include?(try_again_response)
+    end until correct_responses.include?(try_again_response)
   end
 
   def compare_hands
