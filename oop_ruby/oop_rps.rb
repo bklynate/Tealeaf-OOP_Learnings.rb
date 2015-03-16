@@ -71,7 +71,6 @@ end
 class Game
   attr_accessor :player, :computer
   attr_reader :try_again_response
-
   
   CHOICES =  {"r" => "Rock", "p" => "Paper", "s" => "Scissors"}
 
@@ -113,4 +112,4 @@ class Game
   end
 end
 
-game = Game.new.start_game
+Game.new.start_game
