@@ -12,9 +12,9 @@ class Hand
   end
   
   def <=>(other_weapon)
-    if @type == other_weapon.type
+    if type == other_weapon.type
       0
-    elsif (@type == "r" && other_weapon.type == "s") || (@type == "p" && other_weapon.type == "r") || (@type == "s" && other_weapon.type == "p")
+    elsif (type == "r" && other_weapon.type == "s") || (type == "p" && other_weapon.type == "r") || (type == "s" && other_weapon.type == "p")
       1
     else
       -1
@@ -22,7 +22,7 @@ class Hand
   end
 
   def display_winning_message
-    case @type
+    case type
     when 'p'
       say "Paper wraps Rock!"
     when 'r'
