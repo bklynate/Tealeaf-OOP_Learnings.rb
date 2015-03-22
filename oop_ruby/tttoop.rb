@@ -79,7 +79,7 @@ class Game
   
   def initialize
     @board = Board.new
-    @player = Player.new("")
+    @player = Player.new("")  
     @computer = Computer.new
   end
 
@@ -89,7 +89,7 @@ class Game
       computer.choice
       board.draw_board
       winner = board.check_for_winner
-    end until winner || list_of_empty_spaces
+    end until winner || list_of_empty_spaces.empty?
   end
 end
 
