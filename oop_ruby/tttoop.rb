@@ -30,12 +30,9 @@ class Computer < Player
     @name = n   
   end
   
-  def list_of_empty_spaces
-    board.select{ |_,v| v == ' '}.keys
-  end
 
-  def choice
-    @choice = list_of_empty_spaces.sample
+  def choice(board)
+    @choice = board.empty_spaces.sample
     board[choice] = 'O'
   end
 end
@@ -45,8 +42,7 @@ class Board
 
   def initialize
     @board = {}
-    (1..9).each{ |space| board[space] = ' '}
-    board
+    (1..9).each { |space| board[space] = ' '}
   end
  
   def draw_board
@@ -60,6 +56,10 @@ class Board
     say "\n"
   end
 
+  def empty_spaces(board)
+    board.select { |_,v| v == ' '}.keys
+  end
+
   def check_for_winner
     winning_lines = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
     winning_lines.each do |line|
@@ -67,11 +67,7 @@ class Board
       return "Computer Won!!" if board.values_at(*line).count('O') == 3
     end
     nil
-  end
-
-  def list_of_empty_spaces
-    board.select{ |_,v| v == ' '}.keys
-  end
+  end  
 end
 
 class Game
@@ -79,17 +75,18 @@ class Game
   
   def initialize
     @board = Board.new
-    @player = Player.new("")  
+    @player = Human.new("")  
     @computer = Computer.new
   end
 
   def start_game
     begin
-      #human_choice(board)
-      computer.choice
       board.draw_board
-      winner = board.check_for_winner
-    end until winner || list_of_empty_spaces.empty?
+      #human_choice(board)
+      computer.choice(board)
+      board.draw_board
+      #winner = board.check_for_winner
+    end until winner || empty_spaces.empty?
   end
 end
 
