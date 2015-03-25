@@ -30,7 +30,6 @@ class Computer < Player
     @name = n   
   end
   
-
   def choice(board)
     @choice = board.empty_spaces.sample
     board[choice] = 'O'
