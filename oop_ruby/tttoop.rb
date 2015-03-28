@@ -1,8 +1,11 @@
-def say(words)
-  puts ">>> #{words}"
+module Utility
+  def say(words)
+    puts ">>> #{words}"
+  end
 end
 
 class Player
+  include Utility
   attr_accessor :name, :choice
 
   def initialize(name)
@@ -37,6 +40,7 @@ class Computer < Player
 end
 
 class Board
+  include Utility
   attr_accessor :board
 
   def initialize
@@ -44,7 +48,7 @@ class Board
     (1..9).each { |space| board[space] = ' ' }
   end
 
-  def clear_board
+  def new!
     @board = {}
     (1..9).each { |space| board[space] = ' ' }
   end
@@ -66,6 +70,7 @@ class Board
 end
 
 class Game
+  include Utility
   attr_accessor :board, :computer, :human
   attr_reader :try_again_response
   
@@ -87,7 +92,7 @@ class Game
   def start_game
     human.set_name
     begin
-      board.clear_board
+      board.new!
       begin
         board.draw_board
         human.choice(board)
