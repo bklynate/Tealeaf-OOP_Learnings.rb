@@ -7,7 +7,7 @@ end
 
 class Database
 	include Utility
-	attr_accessor :student_db
+	attr_accessor :student_db, :user
 	def initialize
 		@student_db = {}
 	end
@@ -35,9 +35,11 @@ class Database
 			elsif input == "2"
 				if student_db.length == 0
 					say "There is no data to display."
-				elsif student_db.length > 0
-					student_db.each do |name,grade|
+				elsif student_db.length > 0 
+          student_array = student_db.sort_by {|_key, value| value}.reverse
+					student_array.each do |name,grade|
 						say "Name: #{name.capitalize} || Grade: #{grade}"
+            say ""
 					end
 				end
 			end
@@ -58,10 +60,6 @@ class Admin
 		say "Press '1' to enter data"
 		say "Press '2' to display data"
 		@admin_input = gets.chomp
-	end
-
-	def simple_input
-		@simple_input = gets.chomp
 	end
 end
 
