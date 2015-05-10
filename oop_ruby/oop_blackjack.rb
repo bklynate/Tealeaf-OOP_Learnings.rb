@@ -76,10 +76,17 @@ module Hand
   def is_busted?
     total > 21
   end
-
 end
+  
 
 class Blackjack
+  attr_accessor :player, :deck, :dealer
+  def initialize
+    @player = Human.new
+    @deck = Deck.new
+    @dealer = Dealer.new
+  end
+
 end
 
 class Human
@@ -91,9 +98,8 @@ class Human
     @name = gets.chomp.capitalize
     @cards = []
   end
-
 end
-
+  
 class Dealer
  include Hand
  attr_accessor :cards
@@ -104,12 +110,12 @@ class Dealer
   end
 end
 
-nate = Human.new
-deck = Deck.new
-dealer = Dealer.new
+black = Blackjack.new
 
-2.times do
-  nate.add_card(deck.deal_one)
-end
+black.player.add_card(black.deck.deal_one)
+black.player.add_card(black.deck.deal_one)
+black.dealer.add_card(black.deck.deal_one)
+black.dealer.add_card(black.deck.deal_one)
 
-puts nate.show_hand
+puts black.dealer.show_hand
+puts black.player.show_hand
