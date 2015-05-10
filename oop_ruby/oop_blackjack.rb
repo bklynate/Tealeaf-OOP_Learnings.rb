@@ -87,6 +87,14 @@ class Blackjack
     @dealer = Dealer.new
   end
 
+  def run_game
+   player.add_card(deck.deal_one)
+   player.add_card(deck.deal_one)
+   dealer.add_card(deck.deal_one)
+   dealer.add_card(deck.deal_one)
+   dealer.show_hand
+   player.show_hand
+  end
 end
 
 class Human
@@ -110,12 +118,4 @@ class Dealer
   end
 end
 
-black = Blackjack.new
-
-black.player.add_card(black.deck.deal_one)
-black.player.add_card(black.deck.deal_one)
-black.dealer.add_card(black.deck.deal_one)
-black.dealer.add_card(black.deck.deal_one)
-
-puts black.dealer.show_hand
-puts black.player.show_hand
+Blackjack.new.run_game
