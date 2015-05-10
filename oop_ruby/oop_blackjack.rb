@@ -93,6 +93,7 @@ class Blackjack
    dealer.add_card(deck.deal_one)
    dealer.add_card(deck.deal_one)
    dealer.show_hand
+   puts ""
    player.show_hand
   end
 end
