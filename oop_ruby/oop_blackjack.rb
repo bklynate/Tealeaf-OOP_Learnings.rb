@@ -1,3 +1,40 @@
+module Hand
+  def add_card(new_card)
+    cards << new_card   
+  end
+
+  def show_hand
+    puts "-----#{name}'s cards are-----"
+    puts "-----#{cards}-----"
+    puts "-----#{name}'s total: #{total}-----"
+  end
+
+  def total
+    face_values = cards.map{ |card| card.face_value }
+    total = 0
+
+    face_values.each do |card|
+      if card == 'A'
+        total += 11
+      elsif card.to_i == 0
+        total += 10
+      else
+        total += card
+      end
+    end
+
+    face_values.select { |card| card == 'A'}.count.times do
+      total -= 10 if total > 21
+    end
+
+    total
+  end
+
+  def is_busted?
+    total > 21
+  end
+end
+
 class Card
   attr_accessor :suit, :face_value
   attr_reader :proper_suit_name
@@ -41,43 +78,26 @@ class Deck
   end
 end
 
-module Hand
-  def add_card(new_card)
-    cards << new_card   
-  end
-
-  def show_hand
-    puts "-----#{name}'s cards are-----"
-    puts "-----#{cards}-----"
-    puts "-----#{name}'s total: #{total}-----"
-  end
-
-  def total
-    face_values = cards.map{ |card| card.face_value }
-    total = 0
-
-    face_values.each do |card|
-      if card == 'A'
-        total += 11
-      elsif card.to_i == 0
-        total += 10
-      else
-        total += card
-      end
-    end
-
-    face_values.select { |card| card == 'A'}.count.times do
-      total -= 10 if total > 21
-    end
-
-    total
-  end
-
-  def is_busted?
-    total > 21
+class Human
+  include Hand
+  attr_accessor :cards
+  attr_reader :name
+  def initialize
+    puts "Hello player, What is your name?"
+    @name = gets.chomp.capitalize
+    @cards = []
   end
 end
-  
+
+class Dealer
+ include Hand
+ attr_accessor :cards
+ attr_reader :name
+  def initialize
+    @name = "Dealer"
+    @cards = []
+  end
+end 
 
 class Blackjack
   attr_accessor :player, :deck, :dealer
@@ -90,32 +110,18 @@ class Blackjack
   def run_game
    player.add_card(deck.deal_one)
    player.add_card(deck.deal_one)
-   dealer.add_card(deck.deal_one)
-   dealer.add_card(deck.deal_one)
-   dealer.show_hand
-   puts ""
+   player.show_hand
+   player_turn(player)
+   puts "" 
    player.show_hand
   end
-end
 
-class Human
-  include Hand
-  attr_accessor :cards
-  attr_reader :name
-  def initialize
-    puts "Hello player, What is your name?"
-    @name = gets.chomp.capitalize
-    @cards = []
-  end
-end
-  
-class Dealer
- include Hand
- attr_accessor :cards
- attr_reader :name
-  def initialize
-    @name = "Dealer"
-    @cards = []
+  def player_turn(person)
+    puts "#{person.name}, do you want to [h]it or [s]tay?"
+    player_choice = gets.chomp.downcase
+    case player_choice
+      when 'h' then person.cards << person.add_card(deck.deal_one)
+    end
   end
 end
 
