@@ -9,6 +9,11 @@ module Hand
     puts "-----#{name}'s total: #{total}-----"
   end
 
+  def dealer_showhand
+    puts "-----#{name}'s cards are-----"
+    puts "-----#{cards[0]}, ??-----" 
+  end
+
   def total
     face_values = cards.map{ |card| card.face_value }
     total = 0
@@ -112,6 +117,9 @@ class Blackjack
    player.add_card(deck.deal_one)
    player.show_hand
    player_turn(player)
+   dealer.add_card(deck.deal_one)
+   dealer.add_card(deck.deal_one)
+   dealer.dealer_showhand
   end
 
   def player_turn(person)
