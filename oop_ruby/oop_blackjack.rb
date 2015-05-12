@@ -6,12 +6,14 @@ module Hand
   def show_hand
     puts "-----#{name}'s cards are-----"
     puts "-----#{cards}-----"
-    puts "-----#{name}'s total: #{total}-----"
+    puts "-----#{name}'s total: #{total}-----"  
+    puts ''
   end
 
   def dealer_showhand
     puts "-----#{name}'s cards are-----"
-    puts "-----#{cards[0]}, ??-----" 
+    puts "-----#{cards[0]}, ??-----"
+    puts '' 
   end
 
   def total
@@ -107,6 +109,7 @@ end
 class Blackjack
   attr_accessor :player, :deck, :dealer
   def initialize
+    system 'clear'
     puts "Welcome to Nate's OOP Blackjack"
     @player = Human.new
     @deck = Deck.new
@@ -118,13 +121,14 @@ class Blackjack
       person.add_card(deck.deal_one)
     end
   end
-  
+
   def run_game
-   initial_deal(player) 
+   initial_deal(player)
+   initial_deal(dealer)
+   dealer.dealer_showhand 
    player.show_hand
    player_turn(player)
-   initial_deal(dealer)
-   dealer.dealer_showhand
+   dealer_turn(dealer)
   end
 
   def player_turn(person)
@@ -138,6 +142,13 @@ class Blackjack
       system 'clear'
       puts "#{person.show_hand}"
     end until player_choice == 's'
+  end
+
+  def dealer_turn(dealer)
+    while dealer.total < 17
+      dealer.add_card(deck.deal_one)
+    end
+  puts "#{dealer.show_hand}"
   end
 end
 
