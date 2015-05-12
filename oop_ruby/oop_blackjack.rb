@@ -107,18 +107,23 @@ end
 class Blackjack
   attr_accessor :player, :deck, :dealer
   def initialize
+    puts "Welcome to Nate's OOP Blackjack"
     @player = Human.new
     @deck = Deck.new
     @dealer = Dealer.new
   end
 
+  def initial_deal(person)
+    2.times do
+      person.add_card(deck.deal_one)
+    end
+  end
+  
   def run_game
-   player.add_card(deck.deal_one)
-   player.add_card(deck.deal_one)
+   initial_deal(player) 
    player.show_hand
    player_turn(player)
-   dealer.add_card(deck.deal_one)
-   dealer.add_card(deck.deal_one)
+   initial_deal(dealer)
    dealer.dealer_showhand
   end
 
