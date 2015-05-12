@@ -112,8 +112,6 @@ class Blackjack
    player.add_card(deck.deal_one)
    player.show_hand
    player_turn(player)
-   puts "" 
-   player.show_hand
   end
 
   def player_turn(person)
