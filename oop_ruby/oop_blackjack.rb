@@ -117,14 +117,16 @@ class Blackjack
   end
 
   def player_turn(person)
-    puts "#{person.name}, do you want to [h]it or [s]tay?"
-    player_choice = gets.chomp.downcase
-    while player_choice not 's'
+    begin
+      puts "#{person.name}, do you want to [h]it or [s]tay?"
+      player_choice = gets.chomp.downcase
       case player_choice
         when 'h' then person.add_card(deck.deal_one)
         when 's' then "#{person.name} has chosen to stay"
       end
-    end
+      system 'clear'
+      puts "#{person.show_hand}"
+    end until player_choice == 's'
   end
 end
 
