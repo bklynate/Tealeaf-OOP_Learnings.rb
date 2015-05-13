@@ -43,8 +43,8 @@ module Hand
     end 
   end
 
-  def blackjack?
-    if total == 21
+  def blackjack?(person)
+    if person.total == 21
       puts "BLACKJACK!!! #{name.capitalize} has won!"
     end 
   end
@@ -115,6 +115,7 @@ class Dealer
 end 
 
 class Blackjack
+  include Hand
   attr_accessor :player, :deck, :dealer
   def initialize
     system 'clear'
@@ -134,13 +135,24 @@ class Blackjack
   end
 
   def run_game
-   initial_deal(player)
-   initial_deal(dealer)
-   dealer.dealer_showhand
-   player.show_hand
-   player_turn(player)
-   dealer_turn(dealer)
-   compare_hands(player,dealer)
+   begin
+     initial_deal(player)
+     initial_deal(dealer)
+     dealer.dealer_showhand
+     player.show_hand
+     player.total.blackjack?
+     player_turn(player)
+     dealer_turn(dealer)
+   end
+  end
+
+  def try_again
+    correct_responses = ['y','n']
+    begin
+      say "Try again? [y/n]"
+      @try_again_response = gets.chomp.downcase
+      say "Invalid Input !!" unless correct_responses.include?(try_again_response)
+    end until correct_responses.include?(try_again_response)
   end
 
   def player_turn(person)
@@ -156,27 +168,16 @@ class Blackjack
     end until player_choice == 's' or person.total > 21
     if person.total > 21
       puts "BUSTED! GAME OVER!!"
-      exit
     end
   end
 
   def dealer_turn(dealer)
     while dealer.total < 17
       dealer.add_card(deck.deal_one)
-    end
+      if dealer.total > 21
+        puts "BUSTED! GAME OVER!!"
+      end
     puts "#{dealer.show_hand}"
-    if dealer.total > 21
-      puts "BUSTED! GAME OVER!!"
-    end
-  end
-
-  def compare_hands(player,dealer) 
-    if player.total > dealer.total
-      puts "#{player.name} is the winner!"
-    elsif player.total < dealer.total
-      puts "#{dealer.name} is the winner"
-    else
-      puts "It's a tie..."
     end
   end
 end
