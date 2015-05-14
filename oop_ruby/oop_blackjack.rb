@@ -40,13 +40,15 @@ module Hand
   def is_busted?
     if total > 21
       puts "Game Over, You Lose!"
+      game_condition = false
     end 
   end
 
-  def blackjack?(person)
+  def check_for_blackjack(person)
     if person.total == 21
       puts "BLACKJACK!!! #{name.capitalize} has won!"
-    end 
+      game_condition = false
+    end  
   end
 end
 
@@ -129,9 +131,6 @@ class Blackjack
     2.times do
       person.add_card(deck.deal_one)
     end
-    if person.total == 21
-      puts "#{person.name} has BLACKJACK!!"
-    end
   end
 
   def run_game
@@ -140,9 +139,11 @@ class Blackjack
      initial_deal(dealer)
      dealer.dealer_showhand
      player.show_hand
-     player.total.blackjack?
-     player_turn(player)
-     dealer_turn(dealer)
+     begin
+      check_for_blackjack(player)
+      player_turn(player)             
+     end
+     try_again
    end
   end
 
@@ -168,6 +169,7 @@ class Blackjack
     end until player_choice == 's' or person.total > 21
     if person.total > 21
       puts "BUSTED! GAME OVER!!"
+      game_condition = false
     end
   end
 
