@@ -46,7 +46,7 @@ module Hand
 
   def check_for_blackjack(person)
     if person.total == 21
-      puts "BLACKJACK!!! #{name.capitalize} has won!"
+      puts "BLACKJACK!!! #{person.name.capitalize} has won!"
       game_condition = false
     end  
   end
@@ -159,7 +159,7 @@ class Blackjack
   def player_turn(person)
     begin
       puts "#{person.name}, do you want to [h]it or [s]tay?"
-      player_choice = gets.chomp.downcase
+      @player_choice = gets.chomp.downcase
       begin
         case player_choice
           when 'h' then person.add_card(deck.deal_one)
