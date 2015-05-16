@@ -118,7 +118,7 @@ end
 
 class Blackjack
   include Hand
-  attr_accessor :player, :deck, :dealer, :try_again_response, :player_choice
+  attr_accessor :player, :deck, :dealer, :try_again_response, :player_choice, :game_condition
   def initialize
     system 'clear'
     puts "Welcome to Nate's OOP Blackjack"
@@ -142,7 +142,7 @@ class Blackjack
       begin
         check_for_blackjack(player)
         player_turn(player)             
-      end until player_choice == 's'
+      end until player_choice == 's' or game_condition
       try_again
     end until try_again_response == "n"
   end
@@ -150,29 +150,29 @@ class Blackjack
   def try_again
     correct_responses = ['y','n']
     begin
-      say 'Try again? [y/n]'
+      puts 'Try again? [y/n]'
       @try_again_response = gets.chomp.downcase
-      say 'Invalid Input !!'unless correct_responses.include?(try_again_response)
+      puts 'Invalid Input !!'unless correct_responses.include?(try_again_response)
     end until correct_responses.include?(try_again_response)
   end
 
   def player_turn(person)
     begin
-      puts "#{person.name}, do you want to [h]it or [s]tay?"
-      @player_choice = gets.chomp.downcase
       begin
+        puts "#{person.name}, do you want to [h]it or [s]tay?"
+        @player_choice = gets.chomp.downcase
         case player_choice
           when 'h' then person.add_card(deck.deal_one)
           when 's' then "#{person.name} has chosen to stay"
           else 'Not a valid option!'
         end
-      end while (person.total not >= 21) or (player_choice == 's')
+      end until person.total >= 21 or player_choice == 's'
       system 'clear'
       puts "#{person.show_hand}"
     end until player_choice == 's' or person.total > 21
     if person.total > 21
       puts "BUSTED! GAME OVER!!"
-      game_condition = false
+      @game_condition = false
     end
   end
 
