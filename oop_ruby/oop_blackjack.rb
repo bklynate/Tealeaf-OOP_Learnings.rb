@@ -5,7 +5,7 @@ module Hand
 
   def show_hand
     puts "-----#{name}'s cards are-----"
-    puts "-----#{cards}-----"
+    puts "-----#{cards[0]}, #{cards[1]}-----"
     puts "-----#{name}'s total: #{total}-----"  
     puts ''
   end
@@ -38,17 +38,11 @@ module Hand
   end
 
   def is_busted?
-    if total > 21
-      puts "Game Over, You Lose!"
-      game_condition = false
-    end 
+    puts "Game Over, You Lose!" if total > 21
   end
 
-  def check_for_blackjack(person)
-    if person.total == 21
-      puts "BLACKJACK!!! #{person.name.capitalize} has won!"
-      game_condition = false
-    end  
+  def blackjack?
+    puts "BLACKJACK!!! #{name.capitalize} has won!" if total == 21
   end
 end
 
@@ -117,74 +111,53 @@ class Dealer
 end 
 
 class Blackjack
-  include Hand
-  attr_accessor :player, :deck, :dealer, :try_again_response, :player_choice, :game_condition
+  attr_accessor :player, :deck, :dealer
   def initialize
-    system 'clear'
     puts "Welcome to Nate's OOP Blackjack"
     @player = Human.new
     @deck = Deck.new
     @dealer = Dealer.new
   end
 
-  def initial_deal(person)
-    2.times do
-      person.add_card(deck.deal_one)
+  def delay
+    sleep 2.5
+  end
+
+  def clear
+    system 'clear'
+  end
+
+  def initial_deal
+    2.times{player.add_card(deck.deal_one)}
+    2.times{dealer.add_card(deck.deal_one)}
+  end
+
+  def run
+    initial_deal  
+    dealer.dealer_showhand
+    player.show_hand
+    human_choice
+  end
+
+  def human_choice
+    puts "Would you like to [h]it or [s]tay?"
+    choice = gets.chomp.downcase
+
+    if !['h','s'].include?(choice)
+      puts "\nInvalid choice, try again."
+      human_choice
     end
-  end
 
-  def run_game
-    begin
-      initial_deal(player)
-      initial_deal(dealer)
-      dealer.dealer_showhand
-      player.show_hand
-      begin
-        check_for_blackjack(player)
-        player_turn(player)             
-      end until player_choice == 's' or game_condition
-      try_again
-    end until try_again_response == "n"
-  end
-
-  def try_again
-    correct_responses = ['y','n']
-    begin
-      puts 'Try again? [y/n]'
-      @try_again_response = gets.chomp.downcase
-      puts 'Invalid Input !!'unless correct_responses.include?(try_again_response)
-    end until correct_responses.include?(try_again_response)
-  end
-
-  def player_turn(person)
-    begin
-      begin
-        puts "#{person.name}, do you want to [h]it or [s]tay?"
-        @player_choice = gets.chomp.downcase
-        case player_choice
-          when 'h' then person.add_card(deck.deal_one)
-          when 's' then "#{person.name} has chosen to stay"
-          else 'Not a valid option!'
-        end
-      end until person.total >= 21 or player_choice == 's'
-      system 'clear'
-      puts "#{person.show_hand}"
-    end until player_choice == 's' or person.total > 21
-    if person.total > 21
-      puts "BUSTED! GAME OVER!!"
-      @game_condition = false
-    end
-  end
-
-  def dealer_turn(dealer)
-    while dealer.total < 17
-      dealer.add_card(deck.deal_one)
-      if dealer.total > 21
-        puts "BUSTED! GAME OVER!!"
-      end
-    puts "#{dealer.show_hand}"
+    case choice
+    when 'h'
+      new_card = deck.deal_one
+      1.times{player.add_card(new_card)}
+      puts "#{player.name} was dealt: #{new_card}"
+      puts "#{player.name}'s total: #{player.total}"
+    when 's'
+      puts "#{player.name} will stay"
     end
   end
 end
 
-Blackjack.new.run_game
+Blackjack.new.run
