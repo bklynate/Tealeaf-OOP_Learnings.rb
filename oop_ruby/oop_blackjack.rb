@@ -139,6 +139,13 @@ class Blackjack
     end
   end
 
+  def busted?
+    if player.total > 21
+      puts "You've Busted! - #{player.name} has busted"
+      try_again
+    end
+  end
+
   def try_again
     puts 'Would you like to try again?[y/n]'
     choice = gets.chomp.downcase
@@ -179,7 +186,7 @@ class Blackjack
       player.add_card(new_card)
       puts "#{player.name} was dealt: #{new_card}"
       puts "#{player.name}'s total: #{player.total}"
-      human_choice
+      human_choice until blackjack? || busted?
     when 's'
       puts "#{player.name} will stay"
     end
