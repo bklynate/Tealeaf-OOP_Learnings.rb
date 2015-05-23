@@ -132,11 +132,36 @@ class Blackjack
     2.times{dealer.add_card(deck.deal_one)}
   end
 
+  def blackjack?
+    if player.total == 21
+      puts "Congrats, you have hit Blackjack - You Win!!"
+      try_again
+    end
+  end
+
+  def try_again
+    puts 'Would you like to try again?[y/n]'
+    choice = gets.chomp.downcase
+
+    if !['y','n'].include?(choice)
+      puts "\nInvalid choice, choose 'y' or 'n'"
+      try_again
+    end
+
+    case choice
+    when 'y'
+      run
+    when 'n'
+      exit
+    end
+  end
+
   def run
     initial_deal  
     dealer.dealer_showhand
     player.show_hand
     human_choice
+    try_again
   end
 
   def human_choice
@@ -151,9 +176,10 @@ class Blackjack
     case choice
     when 'h'
       new_card = deck.deal_one
-      1.times{player.add_card(new_card)}
+      player.add_card(new_card)
       puts "#{player.name} was dealt: #{new_card}"
       puts "#{player.name}'s total: #{player.total}"
+      human_choice
     when 's'
       puts "#{player.name} will stay"
     end
