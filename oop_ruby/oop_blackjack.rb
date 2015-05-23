@@ -65,6 +65,10 @@ class Card
       when 'C' then 'Clubs'
       when 'D' then 'Diamonds'
     end 
+  end
+
+  def size
+    cards.size
   end 
 end
 
@@ -86,6 +90,10 @@ class Deck
 
   def deal_one
     cards.pop
+  end
+
+  def size
+    cards.size
   end
 end
 
@@ -119,10 +127,6 @@ class Blackjack
     @dealer = Dealer.new
   end
 
-  def delay
-    sleep 2.5
-  end
-
   def clear
     system 'clear'
   end
@@ -141,7 +145,7 @@ class Blackjack
 
   def busted?
     if player.total > 21
-      puts "You've Busted! - #{player.name} has busted"
+      puts "You've Busted! - Game Over"
       try_again
     end
   end
@@ -157,10 +161,19 @@ class Blackjack
 
     case choice
     when 'y'
+      reset_hands
       run
     when 'n'
       exit
     end
+  end
+
+  def reset_hands
+    if deck.size < 25
+      deck = Deck.new
+    end
+    player.cards = []
+    dealer.cards = []
   end
 
   def run
@@ -168,7 +181,25 @@ class Blackjack
     dealer.dealer_showhand
     player.show_hand
     human_choice
+    dealer_choice
+    who_won?
     try_again
+  end
+
+  def who_won?
+    if player.total == dealer.total
+      puts "It's a tie!"
+    elsif player.total > dealer.total
+      puts "#{player.name}'s Total: #{player.total}"
+      puts "#{player.name} won!"
+    else
+      puts "Dealer's Total: #{dealer.total}"
+      puts "#{dealer.name} won!"
+    end
+  end
+
+  def dealer_turn
+    dealer_choice
   end
 
   def human_choice
@@ -186,9 +217,19 @@ class Blackjack
       player.add_card(new_card)
       puts "#{player.name} was dealt: #{new_card}"
       puts "#{player.name}'s total: #{player.total}"
-      human_choice until blackjack? || busted?
+      human_choice unless blackjack? || busted? || choice.include?('s')
     when 's'
-      puts "#{player.name} will stay"
+      puts "#{player.name} chose stay"
+    end
+  end
+
+  def dealer_choice
+    while dealer.total < 17
+      new_card = deck.deal_one
+      dealer.add_card(new_card)
+      puts "#{dealer.name} was dealt: #{new_card}"
+      puts "#{dealer.name}'s total: #{dealer.total}"
+      dealer_choice unless blackjack? || busted?
     end
   end
 end
