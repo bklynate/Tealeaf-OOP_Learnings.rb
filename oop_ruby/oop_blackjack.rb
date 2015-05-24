@@ -69,7 +69,7 @@ class Deck
   def initialize
     @cards = []
     ['H','S','C','D'].each do |suit|
-      [2,3,4,5,6,7,8,9,10,"K","Q",'J','A'].each do |facevalue|
+      [2,3,4,5,6,7,8,9,10,'K','Q','J','A'].each do |facevalue|
         @cards << Card.new(suit,facevalue)
       end
     end
@@ -112,6 +112,9 @@ end
 
 class Blackjack
   attr_accessor :player, :deck, :dealer
+  BLACKJACK = 21
+  DEALER_MIN = 17
+
   def initialize
     puts "Welcome to Nate's OOP Blackjack"
     @player = Human.new
@@ -129,14 +132,14 @@ class Blackjack
   end
 
   def blackjack?
-    if player.total == 21
+    if player.total == BLACKJACK
       puts "Congrats, you have hit Blackjack - You Win!!"
       try_again
     end
   end
 
   def busted?
-    if player.total > 21
+    if player.total > BLACKJACK
       puts "You've Busted! - Game Over"
       try_again
     end
@@ -216,7 +219,7 @@ class Blackjack
   end
 
   def dealer_choice
-    while dealer.total < 17
+    while dealer.total < DEALER_MIN
       new_card = deck.deal_one
       dealer.add_card(new_card)
       puts "#{dealer.name} was dealt: #{new_card}"
