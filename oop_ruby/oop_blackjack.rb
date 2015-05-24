@@ -36,14 +36,6 @@ module Hand
 
     total
   end
-
-  def is_busted?
-    puts "Game Over, You Lose!" if total > 21
-  end
-
-  def blackjack?
-    puts "BLACKJACK!!! #{name.capitalize} has won!" if total == 21
-  end
 end
 
 class Card
