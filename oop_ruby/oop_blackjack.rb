@@ -134,24 +134,24 @@ class Blackjack
   def blackjack?
     if player.total == BLACKJACK
       puts "Congrats, you have hit Blackjack - You Win!!"
-      try_again
+      try_again?
     end
   end
 
   def busted?
     if player.total > BLACKJACK
       puts "You've Busted! - Game Over"
-      try_again
+      try_again?
     end
   end
 
-  def try_again
+  def try_again?
     puts 'Would you like to try again?[y/n]'
     choice = gets.chomp.downcase
 
     if !['y','n'].include?(choice)
       puts "\nInvalid choice, choose 'y' or 'n'"
-      try_again
+      try_again?
     end
 
     case choice
@@ -178,7 +178,7 @@ class Blackjack
     human_choice
     dealer_choice
     who_won?
-    try_again
+    try_again?
   end
 
   def who_won?
